@@ -25,7 +25,7 @@ sts = c_byte()
 
 adq_frec = 100000
 hzAcq = c_double(adq_frec)
-record_time = 10 #s
+record_time = 3 #s
 
 save_png = False
 save_csv = True
@@ -139,12 +139,12 @@ if __name__ == "__main__":
             p2 = multiprocessing.Process(target=sf.plot, args=(png_name, q2,)) 
 
             data ,fLost, fCorrupted = acquire_data()
-            
+            py_data = list(data)
             if save_csv:
-                q1.put(list(data))
+                q1.put(py_data)
                 p1.start()
             if save_png:
-                q2.put(list(data))
+                q2.put(py_data)
                 p2.start()
             
             print(f"Acquisition {acquisition_count} completed")
