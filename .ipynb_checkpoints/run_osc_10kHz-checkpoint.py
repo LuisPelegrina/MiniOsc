@@ -8,7 +8,6 @@ import sys
 import numpy as np
 import csv
 import os
-import pandas as pd
 import multiprocessing 
 import save_functions as sf
 
@@ -23,11 +22,11 @@ else:
 hdwf = c_int()
 sts = c_byte()
 
-adq_frec = 100000
+adq_frec = 10000
 hzAcq = c_double(adq_frec)
 record_time = 3 #s
 
-save_png = False
+save_png = True
 save_csv = True
 
 nSamples = int(record_time * adq_frec)
@@ -36,6 +35,12 @@ rgdSamples = (c_double*nSamples)()
 if nSamples > 134217728.:
     print("Too many samples, lower the time or frequency")
     quit()
+
+
+if adq_frec < 10000:
+    print("Frequency too low, make it higher or change the mode")
+    quit()
+
 
 #print(DWF version
 version = create_string_buffer(16)
@@ -85,7 +90,6 @@ def acquire_data():
         if cCorrupted.value :
             fCorrupted = 1
 
-        
         if cAvailable.value==0 :
             continue
 
@@ -136,7 +140,7 @@ if __name__ == "__main__":
         
             # creating new processes 
             p1 = multiprocessing.Process(target=sf.save, args=(csv_name, q1,)) 
-            p2 = multiprocessing.Process(target=sf.plot, args=(png_name, q2,)) 
+            p2 = multiprocessing.Process(target=sf.save_plot, args=(png_name, q2,)) 
 
             data ,fLost, fCorrupted = acquire_data()
             py_data = list(data)
