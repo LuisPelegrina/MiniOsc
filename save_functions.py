@@ -4,7 +4,7 @@ import numpy as np
 import csv
 import multiprocessing 
 
-def plot(file_name,q):
+def save_plot(file_name,q):
     if q.empty():
         print("Queue is empty!") 
     else:          
@@ -13,6 +13,7 @@ def plot(file_name,q):
         plt.plot(np.fromiter(data, dtype = float))
         plt.savefig(file_name)
 
+        
 def save(file_name, q):
     if q.empty():
         print("Queue is empty!") 
