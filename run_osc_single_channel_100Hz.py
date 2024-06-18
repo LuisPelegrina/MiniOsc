@@ -79,6 +79,18 @@ dwf.FDwfAnalogInChannelEnableSet(hdwf, c_int(-1), c_int(1))
 dwf.FDwfAnalogInChannelRangeSet(hdwf, c_int(-1), c_double(5))
 dwf.FDwfAnalogInChannelFilterSet(hdwf, c_int(-1), filterDecimate)
 
+#set up range channel by channel
+dwf.FDwfAnalogInChannelRangeSet(hdwf, c_int(0), c_double(5)) #1
+dwf.FDwfAnalogInChannelRangeSet(hdwf, c_int(1), c_double(5)) #2
+dwf.FDwfAnalogInChannelRangeSet(hdwf, c_int(2), c_double(5)) #3
+dwf.FDwfAnalogInChannelRangeSet(hdwf, c_int(3), c_double(5)) #4
+
+#set up offset channel by channel
+dwf.FDwfAnalogInChannelOffsetSet(hdwf, c_int(0), c_double(0)) #1
+dwf.FDwfAnalogInChannelOffsetSet(hdwf, c_int(1), c_double(0)) #2
+dwf.FDwfAnalogInChannelOffsetSet(hdwf, c_int(2), c_double(0)) #3
+dwf.FDwfAnalogInChannelOffsetSet(hdwf, c_int(3), c_double(0)) #4
+
 #wait at least 2 seconds for the offset to stabilize
 time.sleep(2)
 
@@ -91,21 +103,20 @@ if __name__ == "__main__":
     # creating multiprocessing Queue 
     q1 = multiprocessing.Queue(-1) 
     q2 = multiprocessing.Queue(-1) 
-    acquisition_count = 0
     
     try:
         while True:
             start_time = time.time()
 
-            print(f"Starting acquisition {acquisition_count}")
+            print(f"Starting acquisition {int(start_time)}")
             # Perform an acquisition and write the data to the CSV file
 
             # Record the end time
-            csv_name = saving_directory + "oscilloscope_data_" + str(acquisition_count) + ".csv"
-            png_name = saving_directory + "oscilloscope_image_" + str(acquisition_count) + ".png"
+            csv_name = saving_directory + "oscilloscope_data_" + str(int(start_time)) + "_CH1.csv"
+            png_name = saving_directory + "oscilloscope_image_" + str(int(start_time)) + "_CH1.png"
         
             # creating new processes 
-            p1 = multiprocessing.Process(target=sf.save, args=(csv_name, q1,)) 
+            p1 = multiprocessing.Process(target=sf.save, args=(csv_name, adq_frec, q1,)) 
             p2 = multiprocessing.Process(target=sf.save_plot, args=(png_name, q2,)) 
 
             while True:
@@ -125,7 +136,7 @@ if __name__ == "__main__":
                 q2.put(py_data)
                 p2.start()
             
-            print(f"Acquisition {acquisition_count} completed")
+            print(f"Acquisition {start_time} completed")
             
             """
             print("Plotting")
@@ -134,7 +145,6 @@ if __name__ == "__main__":
             """   
             end_time = time.time()
             
-            acquisition_count += 1
             print("iteration finished")
         
             # Calculate the time difference
