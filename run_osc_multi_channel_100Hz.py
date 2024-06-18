@@ -43,7 +43,7 @@ rgdSamples_channel2 = (c_double*nSamples)()
 rgdSamples_channel3 = (c_double*nSamples)()
 rgdSamples_channel4 = (c_double*nSamples)()
 
-if nSamples > 32768.:
+if nSamples > 128000000.:
     print("Number of samples exceed oscilloscope buffer, lower the time, frequency or use Record function")
     quit()
 
@@ -79,17 +79,17 @@ dwf.FDwfAnalogInFrequencySet(hdwf, hzAcq)
 dwf.FDwfAnalogInBufferSizeSet(hdwf, c_int(nSamples))
 dwf.FDwfAnalogInChannelEnableSet(hdwf, c_int(-1), c_int(1))
 dwf.FDwfAnalogInChannelRangeSet(hdwf, c_int(-1), c_double(5))
-dwf.FDwfAnalogInChannelFilterSet(hdwf, c_int(-1), filterDecimate)
+dwf.FDwfAnalogInChannelFilterSet(hdwf, c_int(-1), c_int(3))
 
 #set up range channel by channel
-dwf.FDwfAnalogInChannelRangeSet(hdwf, c_int(0), c_double(5)) #1
-dwf.FDwfAnalogInChannelRangeSet(hdwf, c_int(1), c_double(5)) #2
-dwf.FDwfAnalogInChannelRangeSet(hdwf, c_int(2), c_double(5)) #3
-dwf.FDwfAnalogInChannelRangeSet(hdwf, c_int(3), c_double(5)) #4
+dwf.FDwfAnalogInChannelRangeSet(hdwf, c_int(0), c_double(0.2)) #1
+dwf.FDwfAnalogInChannelRangeSet(hdwf, c_int(1), c_double(0.2)) #2
+dwf.FDwfAnalogInChannelRangeSet(hdwf, c_int(2), c_double(0.4)) #3
+dwf.FDwfAnalogInChannelRangeSet(hdwf, c_int(3), c_double(0.4)) #4
 
 #set up offset channel by channel
-dwf.FDwfAnalogInChannelOffsetSet(hdwf, c_int(0), c_double(0)) #1
-dwf.FDwfAnalogInChannelOffsetSet(hdwf, c_int(1), c_double(0)) #2
+dwf.FDwfAnalogInChannelOffsetSet(hdwf, c_int(0), c_double(-1)) #1
+dwf.FDwfAnalogInChannelOffsetSet(hdwf, c_int(1), c_double(0.5)) #2
 dwf.FDwfAnalogInChannelOffsetSet(hdwf, c_int(2), c_double(0)) #3
 dwf.FDwfAnalogInChannelOffsetSet(hdwf, c_int(3), c_double(0)) #4
 
@@ -100,7 +100,7 @@ time.sleep(2)
 print("Starting oscilloscope")
 dwf.FDwfAnalogInConfigure(hdwf, c_int(1), c_int(1))
 
-saving_directory = "Data/"
+saving_directory = "/daq/scratch/FC_mini_osc/"
 
 if __name__ == "__main__": 
     # creating multiprocessing Queue 

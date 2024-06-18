@@ -129,7 +129,7 @@ dwf.FDwfAnalogInChannelOffsetSet(hdwf, c_int(3), c_double(0)) #4
 #wait at least 2 seconds for the offset to stabilize
 time.sleep(2)
 
-saving_directory = "Data/"
+saving_directory = "/daq/scratch/FC_mini_osc/"
 
 if __name__ == "__main__": 
     # creating multiprocessing Queue 
