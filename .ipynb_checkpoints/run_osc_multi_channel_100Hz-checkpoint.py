@@ -110,12 +110,12 @@ if __name__ == "__main__":
         while True:
             start_time = time.time()
 
-            print(f"Starting acquisition {int(start_time)}")
+            print(f"Starting acquisition {start_time}")
             # Perform an acquisition and write the data to the CSV file
 
             # Record the end time
-            csv_name = saving_directory + "oscilloscope_data_" + str(int(start_time)) + "_ALL.csv"
-            png_name = saving_directory + "oscilloscope_image_" + str(int(start_time)) + "_ALL.png"
+            csv_name = saving_directory + "oscilloscope_data_" + str(start_time).replace(".", "-" ) + "_ALL.csv"
+            png_name = saving_directory + "oscilloscope_image_" + str(start_time).replace(".", "-" ) + "_ALL.png"
         
             # creating new processes 
             p1 = multiprocessing.Process(target=sf.save_multi, args=(csv_name, adq_frec, q1,)) 

@@ -112,9 +112,8 @@ if __name__ == "__main__":
             # Perform an acquisition and write the data to the CSV file
 
             # Record the end time
-            csv_name = saving_directory + "oscilloscope_data_" + str(int(start_time)) + "_CH1.csv"
-            png_name = saving_directory + "oscilloscope_image_" + str(int(start_time)) + "_CH1.png"
-        
+            csv_name = saving_directory + "oscilloscope_data_" + str(start_time).replace(".", "-" ) + "_CH1.csv"
+            png_name = saving_directory + "oscilloscope_image_" + str(start_time).replace(".", "-" ) + "_CH1.png"
             # creating new processes 
             p1 = multiprocessing.Process(target=sf.save, args=(csv_name, adq_frec, q1,)) 
             p2 = multiprocessing.Process(target=sf.save_plot, args=(png_name, q2,)) 
