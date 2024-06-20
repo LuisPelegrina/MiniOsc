@@ -139,9 +139,6 @@ if __name__ == "__main__":
     
     try:
         while True:
-            start_time = time.time()
-
-            print(f"Starting acquisition {acquisition_count}")
             # Perform an acquisition and write the data to the CSV file
 
             # Record the end time
@@ -153,6 +150,10 @@ if __name__ == "__main__":
             p1 = multiprocessing.Process(target=sf.save, args=(csv_name, adq_frec, q1,)) 
             p2 = multiprocessing.Process(target=sf.save_plot, args=(png_name, q2,)) 
 
+            
+            start_time = time.time()
+            print(f"Starting acquisition {acquisition_count}")
+            
             data ,fLost, fCorrupted = acquire_data()
             py_data = list(data)
             if save_csv:

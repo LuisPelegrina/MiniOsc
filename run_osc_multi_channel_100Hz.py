@@ -97,10 +97,10 @@ dwf.FDwfAnalogInChannelOffsetSet(hdwf, c_int(3), c_double(0)) #4
 #wait at least 2 seconds for the offset to stabilize
 time.sleep(2)
 
-print("Starting oscilloscope")
+print("Starting repeated acquisitions")
 dwf.FDwfAnalogInConfigure(hdwf, c_int(1), c_int(1))
 
-saving_directory = "/daq/scratch/FC_mini_osc/"
+saving_directory = "/daq/scratch/FC_mini_osc/monitoring_data/"
 
 if __name__ == "__main__": 
     # creating multiprocessing Queue 
@@ -109,11 +109,7 @@ if __name__ == "__main__":
     
     try:
         while True:
-            start_time = time.time()
-
-            print(f"Starting acquisition {start_time}")
             # Perform an acquisition and write the data to the CSV file
-
             # Record the end time
             csv_name = saving_directory + "oscilloscope_data_" + str(start_time).replace(".", "-" ) + "_ALL.csv"
             png_name = saving_directory + "oscilloscope_image_" + str(start_time).replace(".", "-" ) + "_ALL.png"
@@ -121,12 +117,15 @@ if __name__ == "__main__":
             # creating new processes 
             p1 = multiprocessing.Process(target=sf.save_multi, args=(csv_name, adq_frec, q1,)) 
             p2 = multiprocessing.Process(target=sf.write_db, args=(start_time, adq_frec, down_spl, q2,))
-
+            
+            start_time = time.time()
+            print(f"Starting acquisition {start_time}")
+            
             while True:
                 dwf.FDwfAnalogInStatus(hdwf, c_int(1), byref(sts))
                 if sts.value == DwfStateDone.value :
                     break
-                time.sleep(0.01)
+                time.sleep(0.001)
             print("Acquisition done")
 
             dwf.FDwfAnalogInStatusData(hdwf, 0, rgdSamples_channel1, nSamples) # get channel 1 data
