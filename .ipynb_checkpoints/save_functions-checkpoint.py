@@ -44,11 +44,11 @@ def save_multi(file_name, freq, q):
                 print("RANGE ERROR IN SAVING")
                 quit()
             
-            if len(data[1]) != len(data[1]): 
+            if len(data[1]) != len(data[2]): 
                 print("RANGE ERROR IN SAVING")
                 quit()
                
-            if len(data[2]) != len(data[1]):
+            if len(data[1]) != len(data[3]):
                 print("RANGE ERROR IN SAVING")
                 quit()
             
