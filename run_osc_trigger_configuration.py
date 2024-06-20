@@ -100,7 +100,7 @@ print("Starting repeated acquisitions")
 dwf.FDwfAnalogInConfigure(hdwf, c_int(1), c_int(1))
 
 
-saving_directory = "Data/"
+saving_directory = "/daq/scratch/FC_mini_osc/triggered_data/"
 csv_name = saving_directory + "trigger_"
 sec = c_uint(1)
 tick = c_uint(1)
