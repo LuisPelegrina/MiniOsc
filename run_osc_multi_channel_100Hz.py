@@ -105,6 +105,7 @@ saving_directory = "/daq/scratch/FC_mini_osc/"
 if __name__ == "__main__": 
     # creating multiprocessing Queue 
     q1 = multiprocessing.Queue(-1) 
+    q2 = multiprocessing.Queue(-1)
     
     try:
         while True:
@@ -119,7 +120,7 @@ if __name__ == "__main__":
         
             # creating new processes 
             p1 = multiprocessing.Process(target=sf.save_multi, args=(csv_name, adq_frec, q1,)) 
-            p2 = multiprocessing.Process(target=sf.write_db, args=(start_time, adq_frec, down_spl, q1,))
+            p2 = multiprocessing.Process(target=sf.write_db, args=(start_time, adq_frec, down_spl, q2,))
 
             while True:
                 dwf.FDwfAnalogInStatus(hdwf, c_int(1), byref(sts))
@@ -136,7 +137,8 @@ if __name__ == "__main__":
             py_data = [list(rgdSamples_channel1), list(rgdSamples_channel2), list(rgdSamples_channel3), list(rgdSamples_channel4)]
             if save_csv:
                 q1.put(py_data)
-                #p1.start()
+                q2.put(py_data)
+                p1.start()
                 p2.start()
 
             print(f"Acquisition {start_time} completed")
@@ -168,8 +170,7 @@ if __name__ == "__main__":
             # Calculate the time difference
             end_time = time.time()
             print("End time:", end_time - start_time)
-        
-            break
+
 
     except KeyboardInterrupt:
         print("Acquisition stopped by user")

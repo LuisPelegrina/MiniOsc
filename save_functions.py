@@ -83,7 +83,7 @@ def generate_timestamps(start_time, freq, length):
         next_timestamp = timestamps[-1] + increment
         timestamps.append(next_timestamp)
 
-        return timestamps
+    return timestamps
 
 def write_db(start_time, freq, down_spl, q):
     if q.empty():
@@ -94,7 +94,7 @@ def write_db(start_time, freq, down_spl, q):
         conn = psycopg2.connect(**conn_params)
         cur = conn.cursor()
         cur.execute("set search_path to dcs_prd;")
-
+        cur.execute("SELECT * FROM sample WHERE channel_id = 17492;")
         data = q.get()
         if len(data[0]) != len(data[1]):
             print("RANGE ERROR IN SAVING")
@@ -110,12 +110,30 @@ def write_db(start_time, freq, down_spl, q):
         timestamp_list = generate_timestamps(start_time, freq, list_len)
 
         # Define the insert SQL query
-        insert_query = "INSERT INTO example_table (value, timestamp) VALUES (%s, %s);"
-        for value, timestamp in zip(data[0], timestamp_list):
+        insert_query = "INSERT INTO sample (channel_id,float_val,smpl_time,nanosecs,severity_id,status_id) VALUES (%s, %s, %s, %s, %s, %s);"
+        ch1_channel_id = 17492
+        ch2_channel_id = 17493
+        ch3_channel_id = 17494
+        ch4_channel_id = 17495
+
+        for i in range(0, len(data[0]), down_spl):
+            ch1_val = data[0][i]
+            ch2_val = data[1][i]
+            ch3_val = data[2][i]
+            #ch4_val = data[3][i]
+
+            timestamp = timestamp_list[i]
+            decimal_part = str(timestamp).split('.')[1]
             dt_object = datetime.fromtimestamp(timestamp)
             formatted_time = dt_object.strftime('%Y-%m-%d %H:%M:%S.%f')
-            #print(formatted_time)
-            #cur.execute(insert_query, (value, timestamp))
+
+            ch1_data = (ch1_channel_id, ch1_val, formatted_time, int(decimal_part), 5, 4);
+            ch2_data = (ch2_channel_id, ch2_val, formatted_time, int(decimal_part), 5, 4);
+            ch3_data = (ch3_channel_id, ch3_val, formatted_time, int(decimal_part), 5, 4);
+            cur.execute(insert_query, ch1_data)
+            cur.execute(insert_query, ch2_data)
+            cur.execute(insert_query, ch3_data)
+            conn.commit()
 
         cur.close()
         conn.close()
