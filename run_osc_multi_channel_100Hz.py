@@ -30,10 +30,10 @@ else:
 hdwf = c_int()
 sts = c_byte()
 
-
-adq_frec = 100
+adq_frec = 100 # Hz
+down_spl = 10 # Save 1/down_spl of data to slow control DB
 hzAcq = c_double(adq_frec)
-record_time = 10 #s
+record_time = 10 # sec
 
 save_csv = True
 
@@ -119,6 +119,7 @@ if __name__ == "__main__":
         
             # creating new processes 
             p1 = multiprocessing.Process(target=sf.save_multi, args=(csv_name, adq_frec, q1,)) 
+            p2 = multiprocessing.Process(target=sf.write_db, args=(start_time, adq_frec, down_spl, q1,))
 
             while True:
                 dwf.FDwfAnalogInStatus(hdwf, c_int(1), byref(sts))
@@ -132,12 +133,12 @@ if __name__ == "__main__":
             dwf.FDwfAnalogInStatusData(hdwf, 2, rgdSamples_channel3, nSamples) # get channel 3 data
             dwf.FDwfAnalogInStatusData(hdwf, 3, rgdSamples_channel4, nSamples) # get channel 4 data
 
-            
             py_data = [list(rgdSamples_channel1), list(rgdSamples_channel2), list(rgdSamples_channel3), list(rgdSamples_channel4)]
             if save_csv:
                 q1.put(py_data)
-                p1.start()
-            
+                #p1.start()
+                p2.start()
+
             print(f"Acquisition {start_time} completed")
 
 
@@ -168,7 +169,8 @@ if __name__ == "__main__":
             end_time = time.time()
             print("End time:", end_time - start_time)
         
-        
+            break
+
     except KeyboardInterrupt:
         print("Acquisition stopped by user")
         dwf.FDwfAnalogOutReset(hdwf, c_int(0))
