@@ -127,7 +127,6 @@ if __name__ == "__main__":
                 if sts.value == DwfStateDone.value :
                     break
                 time.sleep(0.001)
-            print("Acquisition done")
 
             dwf.FDwfAnalogInStatusData(hdwf, 0, rgdSamples_channel1, nSamples) # get channel 1 data
             dwf.FDwfAnalogInStatusData(hdwf, 1, rgdSamples_channel2, nSamples) # get channel 2 data
@@ -143,34 +142,13 @@ if __name__ == "__main__":
                 q2.put(py_data)
                 p2.start()
                 
-            print(f"Acquisition {start_time} completed")
-
-
-            """
-            print("Plotting")
-            py_data = list(rgdSamples_channel1)
-            plt.plot(np.fromiter(py_data, dtype = float))
-            plt.show()
-            
-            py_data = list(rgdSamples_channel2)
-            plt.plot(np.fromiter(py_data, dtype = float))
-            plt.show()
-            
-            py_data = list(rgdSamples_channel3)
-            plt.plot(np.fromiter(py_data, dtype = float))
-            plt.show()
-            
-            py_data = list(rgdSamples_channel4)
-            plt.plot(np.fromiter(py_data, dtype = float))
-            plt.show()
-            """
             
             end_time = time.time()
             
-            print("iteration finished")
         
             # Calculate the time difference
             end_time = time.time()
+            print(f"Acquisition {start_time} completed")
             print("End time:", end_time - start_time)
 
 
