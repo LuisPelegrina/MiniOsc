@@ -36,6 +36,7 @@ hzAcq = c_double(adq_frec)
 record_time = 10 # sec
 
 save_csv = True
+write_db = False
 
 nSamples = int(record_time * adq_frec)
 rgdSamples_channel1 = (c_double*nSamples)()
@@ -136,10 +137,12 @@ if __name__ == "__main__":
             py_data = [list(rgdSamples_channel1), list(rgdSamples_channel2), list(rgdSamples_channel3), list(rgdSamples_channel4)]
             if save_csv:
                 q1.put(py_data)
-                q2.put(py_data)
                 p1.start()
-                p2.start()
 
+            if write_db:
+                q2.put(py_data)
+                p2.start()
+                
             print(f"Acquisition {start_time} completed")
 
 
