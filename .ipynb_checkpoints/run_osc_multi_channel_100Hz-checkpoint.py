@@ -112,6 +112,9 @@ if __name__ == "__main__":
         while True:
             # Perform an acquisition and write the data to the CSV file
             # Record the end time
+            start_time = time.time()
+            print(f"Starting acquisition {start_time}")
+            
             csv_name = saving_directory + "oscilloscope_data_" + str(start_time).replace(".", "-" ) + "_ALL.csv"
             png_name = saving_directory + "oscilloscope_image_" + str(start_time).replace(".", "-" ) + "_ALL.png"
         
@@ -119,8 +122,6 @@ if __name__ == "__main__":
             p1 = multiprocessing.Process(target=sf.save_multi, args=(csv_name, adq_frec, q1,)) 
             p2 = multiprocessing.Process(target=sf.write_db, args=(start_time, adq_frec, down_spl, q2,))
             
-            start_time = time.time()
-            print(f"Starting acquisition {start_time}")
             
             while True:
                 dwf.FDwfAnalogInStatus(hdwf, c_int(1), byref(sts))

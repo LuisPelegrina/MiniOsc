@@ -107,6 +107,8 @@ if __name__ == "__main__":
     try:
         while True:
             # Perform an acquisition and write the data to the CSV file
+            start_time = time.time()
+            print(f"Starting acquisition {int(start_time)}")
 
             # Record the end time
             csv_name = saving_directory + "oscilloscope_data_" + str(start_time).replace(".", "-" ) + "_CH1.csv"
@@ -116,8 +118,6 @@ if __name__ == "__main__":
             p2 = multiprocessing.Process(target=sf.save_plot, args=(png_name, q2,)) 
 
             
-            start_time = time.time()
-            print(f"Starting acquisition {int(start_time)}")
             
             while True:
                 dwf.FDwfAnalogInStatus(hdwf, c_int(1), byref(sts))
