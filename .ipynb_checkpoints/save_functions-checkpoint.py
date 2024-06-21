@@ -66,10 +66,10 @@ def save_multi(file_name, freq, q):
             time_post_get = time.time()
             print("Writing time:",time_pre_get-time_post_get)
 
- def read_db_config(filename, section):
+def read_db_config(filename, section):
     parser = configparser.ConfigParser()
     parser.read(filename)
-
+     
     db_config = {}
     if parser.has_section(section):
         params = parser.items(section)
@@ -77,7 +77,7 @@ def save_multi(file_name, freq, q):
             db_config[param[0]] = param[1]
     else:
         raise Exception(f"Section {section} not found in the {filename} file")
-
+        
     return db_config
 
 def generate_timestamps(start_time, freq, length):
