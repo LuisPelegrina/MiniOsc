@@ -110,7 +110,7 @@ def write_db(start_time, freq, down_spl, q):
         if len(data[2]) != len(data[1]):
             print("RANGE ERROR IN SAVING")
             quit()
-
+            
         list_len = len(data[0])
         timestamp_list = generate_timestamps(start_time, freq, list_len)
 
@@ -139,7 +139,7 @@ def write_db(start_time, freq, down_spl, q):
             cur.execute(insert_query, ch2_data)
             cur.execute(insert_query, ch3_data)
             conn.commit()
-
+        
         cur.close()
         conn.close()
         
