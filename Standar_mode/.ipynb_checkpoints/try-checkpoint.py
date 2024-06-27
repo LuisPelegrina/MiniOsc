@@ -62,8 +62,8 @@ print("DWF Version: "+str(version.value))
 print("Opening first device")
 #dwf.FDwfDeviceOpen(c_int(-1), byref(hdwf))
 
-dwf.FDwfDeviceOpenEx("ip:10.226.35.165\user:digilent\pass:digilent", byref(hdwf))
-
+szOpt = c_char_p(b"ip:10.226.35.165\nuser:digilent\npass:digilent\nsecure:1")
+dwf.FDwfDeviceOpenEx(szOpt, byref(hdwf))
 
 if hdwf.value == hdwfNone.value:
     szerr = create_string_buffer(512)
