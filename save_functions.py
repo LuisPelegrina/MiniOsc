@@ -15,7 +15,7 @@ from datetime import datetime
 #Function to save 4 Channel data inside a multiprocessing queue with a giving sample frequency "freq" into a .csv file of name "file_name"
 def save_multi(file_name, freq, q):
     #Check if the queue is empty if it is not start the saving process
-    if q.empty(): 
+    if q.empty():
         print("Queue is empty!") 
     else:          
         print("Saving data")
