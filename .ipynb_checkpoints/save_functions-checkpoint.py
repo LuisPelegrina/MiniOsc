@@ -33,13 +33,13 @@ def save_multi(file_name, freq, q):
             #Check that all the data arrays have the save lenght
             if len(data[0]) != len(data[1]):
                 print("RANGE ERROR IN SAVING")
-                quit()
+                return
             if len(data[1]) != len(data[2]): 
                 print("RANGE ERROR IN SAVING")
-                quit()
+                return
             if len(data[1]) != len(data[3]):
                 print("RANGE ERROR IN SAVING")
-                quit()
+                return
 
             #Write each row
             for i in range(len(data[0])):
@@ -50,7 +50,8 @@ def save_multi(file_name, freq, q):
             print("Writing time:",time_pre_get-time_post_get)
             os.system("scp " + file_name + " lpelegri@sbndgpvm01.fnal.gov:/exp/sbnd/data/users/lpelegri/OscData")
             os.system("rm -fr " + file_name)
-            
+        
+    return
         
 #Function to save 4 Channel data inside a multiprocessing queue "q" with a giving sample frequency "freq" into a .csv file of name "file_name" with timing information "sec, tick, ticksec"
 def save_trigger(file_name, freq, sec, tick, ticksec ,q):
@@ -81,17 +82,19 @@ def save_trigger(file_name, freq, sec, tick, ticksec ,q):
             #Check that all the data arrays have the save lenght
             if len(data[0]) != len(data[1]):
                 print("RANGE ERROR IN SAVING")
-                quit()
+                return
             if len(data[1]) != len(data[2]): 
                 print("RANGE ERROR IN SAVING")
-                quit()
+                return
             if len(data[1]) != len(data[3]):
                 print("RANGE ERROR IN SAVING")
-                quit()
+                return
 
             #Write each row
             for i in range(len(data[0])):
                 csvwriter.writerow([i*1./freq, data[0][i], data[1][i], data[2][i], data[3][i]])   
+            
+    return
               
 
 #Functions to write data into the slow control EPICS DB (postgreSQL) directly
@@ -132,13 +135,13 @@ def write_db(start_time, freq, down_spl, q):
         data = q.get()
         if len(data[0]) != len(data[1]):
             print("RANGE ERROR IN SAVING")
-            quit()
+            return
         if len(data[1]) != len(data[1]):
             print("RANGE ERROR IN SAVING")
-            quit()
+            return
         if len(data[2]) != len(data[1]):
             print("RANGE ERROR IN SAVING")
-            quit()
+            return
             
         list_len = len(data[0])
         timestamp_list = generate_timestamps(start_time, freq, list_len)
@@ -174,3 +177,4 @@ def write_db(start_time, freq, down_spl, q):
         
         cur.close()
         conn.close()
+    return
