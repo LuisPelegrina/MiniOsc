@@ -14,17 +14,15 @@ from datetime import datetime
 import subprocess
 
 def rsync_file(local_file, remote_user, remote_host, remote_path):
-    rsync_command = [
-        'rsync',
-        '-avz',  # archive mode, verbose, compress file data during the transfer 
-        local_file,
-        f'{remote_user}@{remote_host}:{remote_path}'
-    ]
+    rsync_command = ['rsync',
+                     '-avz',  # archive mode, verbose, compress file data during the transfer 
+                     local_file,
+                     f'{remote_user}@{remote_host}:{remote_path}'
+                    ]
 
     try:
         # Run the rsync command                                                  
-        result = subprocess.run(rsync_command, check=True, stdout=subprocess.PIP\
-E, stderr=subprocess.PIPE)
+        result = subprocess.run(rsync_command, check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
         # Print the stdout and stderr for debugging                              
         print(result.stdout.decode())
@@ -95,21 +93,6 @@ def save_multi(file_name, freq, q):
             print(f"Error: rsync command failed with exit status {return_code}")
 
 
-    """
-             # Construct the SCP command
-            scp_command = "scp " + file_name + " lpelegri@sbndgpvm01.fnal.gov:/pnfs/sbn/data_add/sbnd/commissioning/FC_mini_osc/monitoring_data/"
-        
-            # Execute the SCP command
-            result = os.system(scp_command)
-        
-            # Check the result
-            if result != 0:
-                print(f"Error: SCP command failed with exit status {result}")
-            else:
-                print("File transferred successfully.")
-                os.system("rm -fr " + file_name)
-          """  
-       
 #Function to save 4 Channel data inside a multiprocessing queue "q" with a giving sample frequency "freq" into a .csv file of name "file_name" with timing information "sec, tick, ticksec"
 def save_trigger(file_name, freq, sec, tick, ticksec ,q):
     #Check if the queue is empty if it is not start the saving process
