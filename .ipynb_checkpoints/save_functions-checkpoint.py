@@ -48,8 +48,9 @@ def save_multi(file_name, freq, q):
             #Print the time it took to take the data
             time_post_get = time.time()
             print("Writing time:",time_pre_get-time_post_get)
-
-
+            os.system("scp " + file_name + " lpelegri@sbndgpvm01.fnal.gov:/exp/sbnd/data/users/lpelegri/OscData")
+            os.system("rm -fr " + file_name)
+            
         
 #Function to save 4 Channel data inside a multiprocessing queue "q" with a giving sample frequency "freq" into a .csv file of name "file_name" with timing information "sec, tick, ticksec"
 def save_trigger(file_name, freq, sec, tick, ticksec ,q):
