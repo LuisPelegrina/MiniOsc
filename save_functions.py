@@ -99,7 +99,6 @@ def save_trigger(file_name, freq, sec, tick, ticksec ,q):
     else:          
         #Extract the data from the queue to a python array
         data = q.get()
-        print("\n")
 
         #Code the time information into the file name to know when the trigger happened
         s = time.localtime(sec.value)
@@ -164,6 +163,9 @@ def write_db(start_time, freq, down_spl, q):
         print("Queue is empty!")
 
     else:
+        #Monitor the time it takes to save the data
+        time_pre_get = time.time()
+        
         conn_params = read_db_config('/home/nfs/sbnddcs/configs/archiver/postgreSQL_db.ini', 'writer')
         conn = psycopg2.connect(**conn_params)
         cur = conn.cursor()
@@ -214,3 +216,6 @@ def write_db(start_time, freq, down_spl, q):
         
         cur.close()
         conn.close()
+        time_post_get = time.time()
+        
+        print("Transfering to db time:", time_post_get - time_pre_get, "\n")

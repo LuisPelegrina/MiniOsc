@@ -106,7 +106,7 @@ if __name__ == "__main__":
         while True:
             # Record the time it takes to do the adquisition
             start_time = time.time()
-            print(f"Starting acquisition {start_time}", "\n")
+            print(f" ---- Starting acquisition {start_time} ----", "\n")
 
             #Define the name of the csv file 
             csv_name = saving_directory + "oscilloscope_data_" + str(start_time).replace(".", "-" ) + "_ALL.csv"
@@ -145,7 +145,7 @@ if __name__ == "__main__":
             
             # Print the time it took to make 1 adquisition
             end_time = time.time()
-            print(f"Acquisition {start_time} completed, duration: ", end_time - start_time, "\n")
+            print(f"---- Acquisition {start_time} completed, duration: ", end_time - start_time, "----\n")
 
 
     except KeyboardInterrupt:
