@@ -81,7 +81,7 @@ def save_multi(file_name, freq, q):
         time_post_get = time.time()
         print("Writing time:",time_pre_get-time_post_get)
             
-        remote_user = 'sbnd'
+        remote_user = 'lpelegri'
         remote_host = 'sbndgpvm01.fnal.gov'
         remote_path = '/pnfs/sbn/data_add/sbnd/commissioning/FC_mini_osc/monitoring_data/'
         return_code = rsync_file(file_name, remote_user, remote_host, remote_path)
