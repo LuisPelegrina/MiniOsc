@@ -145,8 +145,7 @@ if __name__ == "__main__":
             
             # Print the time it took to make 1 adquisition
             end_time = time.time()
-            print(f"Acquisition {start_time} completed")
-            print("End time:", end_time - start_time)
+            print(f"Acquisition {start_time} completed, duration: ", end_time - start_time, "\n")
 
 
     except KeyboardInterrupt:
