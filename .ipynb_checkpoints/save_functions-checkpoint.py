@@ -11,6 +11,37 @@ import multiprocessing
 import configparser
 import psycopg2
 from datetime import datetime
+import subprocess
+
+def rsync_file(local_file, remote_user, remote_host, remote_path):
+    rsync_command = [
+        'rsync',
+        '-avz',  # archive mode, verbose, compress file data during the transfer
+        local_file,
+        f'{remote_user}@{remote_host}:{remote_path}'
+    ]
+
+    try:
+        # Run the rsync command
+        result = subprocess.run(rsync_command, check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        
+        # Print the stdout and stderr for debugging
+        print(result.stdout.decode())
+        print(result.stderr.decode())
+
+        if result.returncode == 0:
+            print("File transferred successfully.")
+            os.system("rm -fr " + file_name)
+        else:
+            print(f"Error: rsync command failed with exit status {result.returncode}")
+
+    except subprocess.CalledProcessError as e:
+        print(f"Rsync failed with error: {e.stderr.decode()}")
+    except FileNotFoundError:
+        print("The local file does not exist.")
+    except Exception as e:
+        print(f"Exception during rsync transfer: {e}")
+
 
 #Function to save 4 Channel data inside a multiprocessing queue with a giving sample frequency "freq" into a .csv file of name "file_name"
 def save_multi(file_name, freq, q):
@@ -48,8 +79,27 @@ def save_multi(file_name, freq, q):
             #Print the time it took to take the data
             time_post_get = time.time()
             print("Writing time:",time_pre_get-time_post_get)
-            os.system("scp " + file_name + " lpelegri@sbndgpvm01.fnal.gov:/exp/sbnd/data/users/lpelegri/OscData")
-            os.system("rm -fr " + file_name)
+            
+            remote_user = 'sbnd'
+            remote_host = 'sbndgpvm01.fnal.gov'
+            remote_path = '/pnfs/sbn/data_add/sbnd/commissioning/FC_mini_osc/monitoring_data/'
+            rsync_file(file_name, remote_user, remote_host, remote_path)
+           
+
+    """
+             # Construct the SCP command
+            scp_command = "scp " + file_name + " lpelegri@sbndgpvm01.fnal.gov:/pnfs/sbn/data_add/sbnd/commissioning/FC_mini_osc/monitoring_data/"
+        
+            # Execute the SCP command
+            result = os.system(scp_command)
+        
+            # Check the result
+            if result != 0:
+                print(f"Error: SCP command failed with exit status {result}")
+            else:
+                print("File transferred successfully.")
+                os.system("rm -fr " + file_name)
+          """  
        
 #Function to save 4 Channel data inside a multiprocessing queue "q" with a giving sample frequency "freq" into a .csv file of name "file_name" with timing information "sec, tick, ticksec"
 def save_trigger(file_name, freq, sec, tick, ticksec ,q):
