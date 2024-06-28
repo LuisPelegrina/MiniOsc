@@ -82,7 +82,7 @@ def save_multi(file_name, freq, q):
         return_code = rsync_file(file_name, remote_user, remote_host, remote_path)
 
         if return_code == 0:
-            print("File transferred successfully.", "\n")  
+            print("File transferred successfully.")  
             os.system("rm -fr " + file_name)                                    
         else:
             print(f"Error: rsync command failed with exit status {return_code}")
@@ -99,6 +99,7 @@ def save_trigger(file_name, freq, sec, tick, ticksec ,q):
     else:          
         #Extract the data from the queue to a python array
         data = q.get()
+        print("\n")
 
         #Code the time information into the file name to know when the trigger happened
         s = time.localtime(sec.value)
