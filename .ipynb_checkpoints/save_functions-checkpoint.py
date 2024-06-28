@@ -49,7 +49,7 @@ def save_multi(file_name, freq, q):
     if q.empty():
         print("Queue is empty!") 
     else:          
-        print("Saving data")
+        
         #Extract the data from the queue to a python array
         data = q.get()
 
@@ -75,11 +75,6 @@ def save_multi(file_name, freq, q):
             #Write each row
             for i in range(len(data[0])):
                 csvwriter.writerow([i*1./freq, data[0][i], data[1][i], data[2][i], data[3][i]])   
-
-        
-        #Print the time it took to take the data
-        time_post_get = time.time()
-        print("Writing time:",time_pre_get-time_post_get)
             
         remote_user = 'lpelegri'
         remote_host = 'sbndgpvm01.fnal.gov'
@@ -87,11 +82,14 @@ def save_multi(file_name, freq, q):
         return_code = rsync_file(file_name, remote_user, remote_host, remote_path)
 
         if return_code == 0:
-            print("File transferred successfully.")  
+            print("File transferred successfully.", \n")  
             os.system("rm -fr " + file_name)                                    
         else:
             print(f"Error: rsync command failed with exit status {return_code}")
 
+        #Print the time it took to take the data
+        time_post_get = time.time()
+        print("Transfering and Writing time:", time_post_get - time_pre_get, "\n")
 
 #Function to save 4 Channel data inside a multiprocessing queue "q" with a giving sample frequency "freq" into a .csv file of name "file_name" with timing information "sec, tick, ticksec"
 def save_trigger(file_name, freq, sec, tick, ticksec ,q):
