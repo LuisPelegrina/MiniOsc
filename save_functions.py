@@ -14,7 +14,7 @@ from datetime import datetime
 import subprocess
 
 def rsync_file(local_file, remote_user, remote_host, remote_path):
-       rsync_command = [
+    rsync_command = [
         'rsync',
         '-avz',  # archive mode, verbose, compress file data during the transfer 
         local_file,
