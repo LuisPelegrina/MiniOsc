@@ -82,7 +82,7 @@ def save_multi(file_name, freq, q):
         return_code = rsync_file(file_name, remote_user, remote_host, remote_path)
 
         if return_code == 0:
-            print("File transferred successfully.", \n")  
+            print("File transferred successfully.", "\n")  
             os.system("rm -fr " + file_name)                                    
         else:
             print(f"Error: rsync command failed with exit status {return_code}")
