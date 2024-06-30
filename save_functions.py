@@ -12,6 +12,7 @@ import configparser
 import psycopg2
 from datetime import datetime
 import subprocess
+from epics import caget, caput, cainfo
 
 def rsync_file(local_file, remote_user, remote_host, remote_path):
     rsync_command = ['rsync',
