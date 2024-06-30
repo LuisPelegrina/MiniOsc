@@ -182,7 +182,16 @@ def write_db(start_time, freq, down_spl, q):
         if len(data[2]) != len(data[1]):
             print("RANGE ERROR IN SAVING")
             return
-            
+
+
+        for i in range(4):
+            this_max = max(data[i])
+            this_min = min(data[i])
+            this_pv_max = "fct_osc_ch" + str(i + 1) + "/max"
+            this_pv_min = "fct_osc_ch" + str(i + 1) + "/min"
+            caput(this_pv_max, this_max)
+            caput(this_pv_min, this_min)
+
         list_len = len(data[0])
         timestamp_list = generate_timestamps(start_time, freq, list_len)
 
